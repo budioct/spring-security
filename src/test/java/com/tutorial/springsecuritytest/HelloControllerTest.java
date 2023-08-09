@@ -25,7 +25,7 @@ public class HelloControllerTest {
     @DisplayName("""
             when calling the /hello endpoint Authenticated we should get back Hello in the response body, and an http status of 200 OK.
             """)
-    @WithMockUser // creates a mock security context
+    @WithMockUser // security context // creates a mock security context
     void testHelloAuthenticated() throws Exception {
 
         mockMvc.perform(
