@@ -4,6 +4,7 @@ import com.tutorial.dto.CreateUserRequest;
 import com.tutorial.dto.UserResponse;
 import com.tutorial.entity.User;
 import com.tutorial.repository.UserRepository;
+import com.tutorial.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
@@ -36,9 +37,7 @@ public class UsersDetailServices implements UserDetailsService {
 
         User user = usrnm.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Username not found"));
 
-        //return new SecurityUser(user);
-
-        return null;
+        return new SecurityUser(user);
 
     }
 
