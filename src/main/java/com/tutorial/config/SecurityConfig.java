@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -31,18 +33,28 @@ public class SecurityConfig {
         //        .anyRequest().authenticated();
 
         // authentication ver 2
-        http.httpBasic().and()
-                        .formLogin();
+        //http.httpBasic().and()
+        //                .formLogin();
 
         // authorization
+        //http.authorizeHttpRequests()
+        //        .anyRequest().authenticated();
+
+        // register
+        http.httpBasic();
+
         http.authorizeHttpRequests()
+                .requestMatchers("/api/user").permitAll()
                 .anyRequest().authenticated();
+
+        // ignore endpoint register
+        http.csrf().ignoringRequestMatchers("/api/user");
 
         return http.build();
 
     }
 
-    @Bean
+//    @Bean
     public UserDetailsService userDetailsService(){
 
         UserDetails user = User.builder()
@@ -58,6 +70,8 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
 
+        // return new SCryptPasswordEncoder();
+        // return new Pbkdf2PasswordEncoder();
         return new BCryptPasswordEncoder(); // implement BCripty for char password
 
     }
