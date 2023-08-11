@@ -17,8 +17,20 @@ create table users
 ) engine = InnoDB;
 
 drop table users;
-
 desc users;
-
 select * from users;
+
+create table authorities
+(
+    id      bigint not null auto_increment,
+    name    varchar(100),
+    user_id bigint,
+    primary key (id),
+    foreign key fk_users_authorities (user_id) references users (id)
+) engine = InnoDB;
+
+drop table authorities;
+desc authorities;
+select * from users;
+select * from authorities;
 

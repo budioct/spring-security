@@ -5,6 +5,7 @@ import com.tutorial.dto.UserResponse;
 import com.tutorial.entity.User;
 import com.tutorial.repository.UserRepository;
 import com.tutorial.security.SecurityUser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @Service
+@Slf4j
+@Transactional(readOnly = true)
 public class UsersDetailServices implements UserDetailsService {
 
     @Autowired
@@ -33,9 +36,11 @@ public class UsersDetailServices implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<User> usrnm = userRepository.findFirstByUsername(username);
+        var usrnm = userRepository.findFirstByUsername(username);
 
         User user = usrnm.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Username not found"));
+
+        //log.info("loadUserByUsername=== {}", user);
 
         return new SecurityUser(user);
 

@@ -45,6 +45,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
                 .requestMatchers("/api/user").permitAll()
+                .requestMatchers("/api/test").hasAuthority("read")
+                .requestMatchers("/api/demo").hasAuthority("write")
                 .anyRequest().authenticated();
 
         // ignore endpoint register

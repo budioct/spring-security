@@ -2,13 +2,17 @@ package com.tutorial.security;
 
 import com.tutorial.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+@Slf4j
 @AllArgsConstructor
 public class SecurityUser implements UserDetails {
 
@@ -26,7 +30,14 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("read"));
+        var authorities = user.getAuthorities()
+                .stream().map(a -> new SimpleGrantedAuthority(a.getName()))
+                .collect(Collectors.toSet());
+
+        log.info("authorities== {}", authorities);
+        log.info("authorities== {}", authorities.size());
+
+        return authorities;
     }
 
     @Override
