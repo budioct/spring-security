@@ -2,6 +2,7 @@ package com.tutorial.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,8 +46,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
                 .requestMatchers("/api/user").permitAll()
-                .requestMatchers("/api/test").hasAuthority("read")
-                .requestMatchers("/api/demo").hasAuthority("write")
+//                .requestMatchers("/api/test").hasAuthority("read") // apply the authority basic
+//                .requestMatchers("/api/demo").hasAuthority("write")
+                .requestMatchers(HttpMethod.GET,"/api/**").hasAuthority("read") // apply the authority with specification
                 .anyRequest().authenticated();
 
         // ignore endpoint register

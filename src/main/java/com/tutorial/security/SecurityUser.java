@@ -34,8 +34,8 @@ public class SecurityUser implements UserDetails {
                 .stream().map(a -> new SimpleGrantedAuthority(a.getName()))
                 .collect(Collectors.toSet());
 
-        log.info("authorities== {}", authorities);
-        log.info("authorities== {}", authorities.size());
+        //log.info("authorities== {}", authorities);
+        //log.info("authorities== {}", authorities.size());
 
         return authorities;
     }
