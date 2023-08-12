@@ -3,6 +3,8 @@ package com.tutorial.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +15,11 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true) // apply security global level method // depreceted // only pre-post
 @Configuration
+@EnableMethodSecurity // apply security global level method
 public class SecurityConfig {
 
     /**
@@ -44,11 +49,15 @@ public class SecurityConfig {
         // register
         http.httpBasic();
 
+        // remember
+        //http.rememberMe().tokenRepository();
+
         http.authorizeHttpRequests()
                 .requestMatchers("/api/user").permitAll()
 //                .requestMatchers("/api/test").hasAuthority("read") // apply the authority basic
 //                .requestMatchers("/api/demo").hasAuthority("write")
                 .requestMatchers(HttpMethod.GET,"/api/**").hasAuthority("read") // apply the authority with specification
+                .requestMatchers("/smth").access(new WebExpressionAuthorizationManager("isAuthenticated()")) // apply the authorization at the method level
                 .anyRequest().authenticated();
 
         // ignore endpoint register
